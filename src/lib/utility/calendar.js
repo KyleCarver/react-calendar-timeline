@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { _get } from './generic'
+import React from 'react';
 
 /**
  * Calculate the ms / pixel ratio of the timeline state
@@ -645,7 +646,6 @@ export function getCanvasBoundariesFromVisibleTime(
   const canvasTimeEnd = canvasTimeStart + zoom * 3
   return [canvasTimeStart, canvasTimeEnd]
 }
-
 /**
  * Get the the canvas area for a given visible time
  * Will shift the start/end of the canvas if the visible time
@@ -658,7 +658,7 @@ export function getCanvasBoundariesFromVisibleTime(
  * @param {*} props
  * @param {*} state
  */
-export function calculateScrollCanvas(
+export function calculateScrollCanvas (
   visibleTimeStart,
   visibleTimeEnd,
   forceUpdateDimensions,
@@ -673,14 +673,13 @@ export function calculateScrollCanvas(
   const newState = { visibleTimeStart, visibleTimeEnd }
 
   // Check if the current canvas covers the new times
-  const canKeepCanvas =
-    newZoom === oldZoom &&
-    visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.5 &&
-    visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.5 &&
-    visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.5 &&
-    visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.5
+  const canKeepCanvas = newZoom === oldZoom
+      && visibleTimeStart >= oldCanvasTimeStart + oldZoom * 0.15
+      && visibleTimeStart <= oldCanvasTimeStart + oldZoom * 1.85
+      && visibleTimeEnd >= oldCanvasTimeStart + oldZoom * 1.15
+      && visibleTimeEnd <= oldCanvasTimeStart + oldZoom * 2.85
 
-  if (!canKeepCanvas || forceUpdateDimensions) {
+  if ((!canKeepCanvas || forceUpdateDimensions)) {
     const [canvasTimeStart, canvasTimeEnd] = getCanvasBoundariesFromVisibleTime(
       visibleTimeStart,
       visibleTimeEnd
